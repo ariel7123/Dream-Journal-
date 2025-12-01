@@ -1,0 +1,212 @@
+@use '../../styles/variables' as *;
+
+.auth-page {
+  display: flex;
+  min-height: 100vh;
+
+  // Left side - Brand
+  &__side {
+    flex: 1;
+    background-color: $color-dark;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__brand {
+    text-align: center;
+    z-index: 1;
+  }
+
+  &__logo {
+    font-size: 80px;
+    display: block;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__title {
+    font-size: $font-size-3xl;
+    color: $color-bg-white;
+    margin-bottom: $spacing-md;
+  }
+
+  &__tagline {
+    font-size: $font-size-lg;
+    color: $color-text-muted;
+    line-height: 1.8;
+  }
+
+  &__stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+
+    .star {
+      position: absolute;
+      animation: twinkle 2s ease-in-out infinite;
+
+      &--1 {
+        top: 20%;
+        left: 20%;
+        font-size: 30px;
+        animation-delay: 0s;
+      }
+
+      &--2 {
+        top: 15%;
+        right: 25%;
+        font-size: 20px;
+        animation-delay: 0.5s;
+      }
+
+      &--3 {
+        bottom: 30%;
+        right: 20%;
+        font-size: 25px;
+        animation-delay: 1s;
+      }
+    }
+  }
+
+  // Right side - Form
+  &__form-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $color-bg-white;
+    padding: $spacing-xl;
+  }
+}
+
+// Auth Form
+.auth-form {
+  width: 100%;
+  max-width: 400px;
+
+  &__title {
+    font-size: $font-size-2xl;
+    color: $color-dark;
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__error {
+    background-color: rgba($color-danger, 0.1);
+    color: $color-danger;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-lg;
+    text-align: center;
+    font-size: $font-size-sm;
+  }
+
+  &__field {
+    margin-bottom: $spacing-lg;
+  }
+
+  &__label {
+    display: block;
+    font-size: $font-size-sm;
+    color: $color-text;
+    margin-bottom: $spacing-sm;
+    font-weight: 500;
+  }
+
+  &__input {
+    width: 100%;
+    padding: $spacing-md;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
+    transition: border-color $transition-fast;
+    background-color: #f8f8f8;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+
+    &:focus {
+      border-color: $color-primary;
+      background-color: $color-bg-white;
+    }
+  }
+
+  &__button {
+    width: 100%;
+    padding: $spacing-md $spacing-lg;
+    background-color: $color-primary;
+    color: $color-bg-white;
+    font-size: $font-size-base;
+    font-weight: 600;
+    border-radius: $radius-md;
+    transition: background-color $transition-fast;
+    margin-top: $spacing-md;
+
+    &:hover:not(:disabled) {
+      background-color: $color-primary-dark;
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+
+  &__link {
+    text-align: center;
+    margin-top: $spacing-lg;
+    font-size: $font-size-sm;
+    color: $color-text-light;
+
+    a {
+      color: $color-primary;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Responsive
+@media (max-width: $breakpoint-md) {
+  .auth-page {
+    flex-direction: column;
+
+    &__side {
+      padding: $spacing-xl;
+      min-height: 200px;
+    }
+
+    &__logo {
+      font-size: 50px;
+    }
+
+    &__title {
+      font-size: $font-size-xl;
+    }
+
+    &__tagline {
+      font-size: $font-size-base;
+    }
+  }
+}

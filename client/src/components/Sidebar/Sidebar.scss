@@ -1,0 +1,115 @@
+@use '../../styles/variables' as *;
+
+.sidebar {
+  width: $sidebar-width;
+  height: 100vh;
+  background-color: $color-dark;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  top: 0;
+
+  // Logo
+  &__logo {
+    padding: $spacing-lg;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    border-bottom: 1px solid $color-dark-light;
+  }
+
+  &__logo-icon {
+    font-size: 28px;
+  }
+
+  &__logo-text {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $color-bg-white;
+  }
+
+  // Navigation
+  &__nav {
+    flex: 1;
+    padding: $spacing-lg $spacing-md;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    color: $color-text-muted;
+    transition: all $transition-fast;
+    text-decoration: none;
+
+    &:hover {
+      background-color: $color-dark-light;
+      color: $color-bg-white;
+    }
+
+    &--active {
+      background-color: $color-primary;
+      color: $color-bg-white;
+
+      &:hover {
+        background-color: $color-primary-dark;
+      }
+    }
+  }
+
+  &__link-icon {
+    font-size: 18px;
+  }
+
+  &__link-text {
+    font-size: $font-size-sm;
+    font-weight: 500;
+  }
+
+  // User section
+  &__user {
+    padding: $spacing-md;
+    border-top: 1px solid $color-dark-light;
+  }
+
+  &__user-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    background-color: $color-dark-light;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__user-icon {
+    font-size: 20px;
+  }
+
+  &__user-name {
+    color: $color-bg-white;
+    font-size: $font-size-sm;
+    font-weight: 500;
+  }
+
+  &__logout {
+    width: 100%;
+    padding: $spacing-sm;
+    background: none;
+    color: $color-danger;
+    font-size: $font-size-sm;
+    border-radius: $radius-md;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: rgba($color-danger, 0.1);
+    }
+  }
+}

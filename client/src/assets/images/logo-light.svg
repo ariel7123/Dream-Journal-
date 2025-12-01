@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64">
+  <defs>
+    <linearGradient id="moonGradientLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5"/>
+      <stop offset="50%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="textGradientDark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e1b4b"/>
+      <stop offset="100%" style="stop-color:#312e81"/>
+    </linearGradient>
+    <filter id="logoGlowLight" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#4f46e5" flood-opacity="0.15"/>
+    </filter>
+    <mask id="crescentMaskLight">
+      <rect width="64" height="64" fill="white"/>
+      <circle cx="38" cy="26" r="13" fill="black"/>
+    </mask>
+  </defs>
+  
+  <!-- Icon container -->
+  <g transform="translate(4, 4)">
+    <!-- Background circle -->
+    <circle cx="28" cy="28" r="28" fill="#f5f3ff"/>
+    <circle cx="28" cy="28" r="26" fill="#ede9fe"/>
+    <circle cx="28" cy="28" r="25" fill="none" stroke="url(#moonGradientLight)" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Crescent moon - shifted right and down -->
+    <g filter="url(#logoGlowLight)">
+      <circle cx="25" cy="30" r="15" fill="url(#moonGradientLight)" mask="url(#crescentMaskLight)"/>
+    </g>
+    
+    <!-- Stars -->
+    <circle cx="46" cy="16" r="1.8" fill="#f59e0b">
+      <animate attributeName="opacity" values="1;0.6;1" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="49" cy="24" r="1.2" fill="#f59e0b" opacity="0.85"/>
+    <circle cx="44" cy="20" r="0.9" fill="#f59e0b" opacity="0.7"/>
+    <circle cx="47" cy="30" r="0.7" fill="#f59e0b" opacity="0.6"/>
+    
+    <!-- Moon highlights -->
+    <circle cx="19" cy="26" r="0.7" fill="#fff" opacity="0.8"/>
+    <circle cx="17" cy="34" r="0.5" fill="#fff" opacity="0.5"/>
+  </g>
+  
+  <!-- Text: "Dream" -->
+  <text x="72" y="38" 
+        font-family="'Segoe UI', 'SF Pro Display', -apple-system, sans-serif" 
+        font-size="28" 
+        font-weight="300" 
+        letter-spacing="2"
+        fill="url(#textGradientDark)"
+        filter="url(#subtleShadow)">Dream</text>
+  
+  <!-- Text: "Journal" -->
+  <text x="156" y="38" 
+        font-family="'Segoe UI', 'SF Pro Display', -apple-system, sans-serif" 
+        font-size="28" 
+        font-weight="600" 
+        letter-spacing="1"
+        fill="url(#textGradientDark)"
+        filter="url(#subtleShadow)">Journal</text>
+  
+  <!-- Decorative line -->
+  <line x1="72" y1="48" x2="260" y2="48" stroke="url(#moonGradientLight)" stroke-width="1" opacity="0.25"/>
+  
+  <!-- Accent star -->
+  <circle cx="268" cy="20" r="2" fill="#f59e0b" opacity="0.9"/>
+</svg>
