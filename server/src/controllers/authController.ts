@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import User from '../models/User.js';
 import { generateToken } from '../utils/jwt.js';
 import { AuthRequest } from '../types/index.js';
+import { ApiResponse } from '../types/index.js';
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -12,10 +13,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     // Validation
     if (!email || !password || !name) {
-      res.status(400).json({
+      const response: ApiResponse = {
         success: false,
         error: 'Please provide email, password and name',
-      });
+      };
+
+      res.status(400).json(response);
       return;
     }
 
