@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Sidebar from '../Sidebar/Sidebar';
+import Sidebar from '../sidebar/Sidebar';
 import './Layout.scss';
 
 interface LayoutProps {

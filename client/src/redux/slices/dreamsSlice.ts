@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { dreamsAPI } from '../../services/api';
-import { Dream } from '../../types';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { dreamsAPI } from "../../services/api";
+import { Dream } from "../../types";
 
 interface DreamsState {
   dreams: Dream[];
@@ -15,17 +15,15 @@ const initialState: DreamsState = {
 };
 
 // Async thunks
-export const fetchDreams = createAsyncThunk(
-  'dreams/fetchDreams',
-  async () => {
-    const response = await dreamsAPI.getAll();
-    const dreamsData = (response as { data?: Dream[] }).data || (response as Dream[]);
-    return Array.isArray(dreamsData) ? dreamsData : [];
-  }
-);
+export const fetchDreams = createAsyncThunk("dreams/fetchDreams", async () => {
+  const response = await dreamsAPI.getAll();
+  const dreamsData =
+    (response as { data?: Dream[] }).data || (response as Dream[]);
+  return Array.isArray(dreamsData) ? dreamsData : [];
+});
 
 export const createDream = createAsyncThunk(
-  'dreams/createDream',
+  "dreams/createDream",
   async (dreamData: {
     title: string;
     content: string;
@@ -39,9 +37,17 @@ export const createDream = createAsyncThunk(
   }
 );
 
+export const deleteDream = createAsyncThunk(
+  "dreams/deleteDream",
+  async (dreamId: string) => {
+    await dreamsAPI.delete(dreamId);
+    return dreamId;
+  }
+);
+
 // Slice
 const dreamsSlice = createSlice({
-  name: 'dreams',
+  name: "dreams",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -51,13 +57,16 @@ const dreamsSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchDreams.fulfilled, (state, action: PayloadAction<Dream[]>) => {
-        state.isLoading = false;
-        state.dreams = action.payload;
-      })
+      .addCase(
+        fetchDreams.fulfilled,
+        (state, action: PayloadAction<Dream[]>) => {
+          state.isLoading = false;
+          state.dreams = action.payload;
+        }
+      )
       .addCase(fetchDreams.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Failed to fetch dreams';
+        state.error = action.error.message || "Failed to fetch dreams";
       });
 
     // Create Dream
@@ -72,7 +81,27 @@ const dreamsSlice = createSlice({
       })
       .addCase(createDream.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message || 'Failed to create dream';
+        state.error = action.error.message || "Failed to create dream";
+      });
+
+    // Delete Dream
+    builder
+      .addCase(deleteDream.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(
+        deleteDream.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.isLoading = false;
+          state.dreams = state.dreams.filter(
+            (dream) => dream._id !== action.payload
+          );
+        }
+      )
+      .addCase(deleteDream.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || "Failed to delete dream";
       });
   },
 });
