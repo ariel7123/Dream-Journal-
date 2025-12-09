@@ -1,29 +1,30 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import './AuthPages.scss';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { login } from "../../redux/slices/authSlice";
+import "./AuthPages.scss";
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [localError, setLocalError] = useState("");
 
-  const { login } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { isLoading, error: reduxError } = useAppSelector((state) => state.auth);
+
+  const error = localError || reduxError;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setIsLoading(true);
+    setLocalError("");
 
     try {
-      await login(email, password);
-      navigate('/dashboard');
-    } catch {
-      setError('שגיאה בהתחברות');
-    } finally {
-      setIsLoading(false);
+      await dispatch(login({ email, password })).unwrap();
+      navigate("/dashboard");
+    } catch (err: any) {
+      setLocalError(err || "שגיאה בהתחברות");
     }
   };
 
@@ -87,12 +88,11 @@ function LoginPage() {
             type="submit"
             disabled={isLoading}
           >
-            {isLoading ? 'מתחבר...' : 'התחבר'}
+            {isLoading ? "מתחבר..." : "התחבר"}
           </button>
 
           <p className="auth-form__link">
-            אין לך חשבון?{' '}
-            <Link to="/register">הירשם כאן</Link>
+            אין לך חשבון? <Link to="/register">הירשם כאן</Link>
           </p>
         </form>
       </div>

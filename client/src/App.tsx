@@ -1,15 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
-import { AuthProvider } from './context/AuthContext';
-import { useAuth } from './hooks/useAuth';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { useAppSelector } from './redux/hooks';
 import Layout from './components/Layout/Layout';
 import LoginPage from './pages/LoginPage/LoginPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
+import NewDreamPage from './pages/NewDreamPage/NewDreamPage';
+import AuthInitializer from './components/AuthInitializer';
 import './styles/global.scss';
 
 // Protected Route Wrapper
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { token, isLoading } = useAuth();
+  const { token, isLoading } = useAppSelector((state) => state.auth);
 
   if (isLoading) {
     return (
@@ -28,7 +31,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 // Public Route Wrapper (redirect if logged in)
 function PublicRoute({ children }: { children: React.ReactNode }) {
-  const { token, isLoading } = useAuth();
+  const { token, isLoading } = useAppSelector((state) => state.auth);
 
   if (isLoading) {
     return (
@@ -76,6 +79,14 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/dreams/new"
+        element={
+          <ProtectedRoute>
+            <NewDreamPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Default redirect */}
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -88,9 +99,11 @@ function AppRoutes() {
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
+      <Provider store={store}>
+        <AuthInitializer>
+          <AppRoutes />
+        </AuthInitializer>
+      </Provider>
     </BrowserRouter>
   );
 }

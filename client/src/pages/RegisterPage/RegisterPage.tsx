@@ -1,44 +1,42 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import './AuthPages.scss';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { register } from "../../redux/slices/authSlice";
+import "./AuthPages.scss";
 
 function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [localError, setLocalError] = useState("");
 
-  const { register } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { isLoading, error: reduxError } = useAppSelector((state) => state.auth);
+
+  const error = localError || reduxError;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setLocalError("");
 
-    // Validate passwords match
     if (password !== confirmPassword) {
-      setError('הסיסמאות לא תואמות');
+      setLocalError("הסיסמאות לא תואמות");
       return;
     }
 
-    // Validate password length
     if (password.length < 6) {
-      setError('הסיסמה חייבת להכיל לפחות 6 תווים');
+      setLocalError("הסיסמה חייבת להכיל לפחות 6 תווים");
       return;
     }
-
-    setIsLoading(true);
 
     try {
-      await register(name, email, password);
-      navigate('/dashboard');
-    } catch {
-      setError('שגיאה בהרשמה');
-    } finally {
-      setIsLoading(false);
+      await dispatch(register({ name, email, password })).unwrap();
+      navigate("/dashboard");
+    } catch (err: any) {
+      setLocalError(err || "שגיאה בהרשמה");
     }
   };
 
@@ -132,12 +130,11 @@ function RegisterPage() {
             type="submit"
             disabled={isLoading}
           >
-            {isLoading ? 'נרשם...' : 'הירשם'}
+            {isLoading ? "נרשם..." : "הירשם"}
           </button>
 
           <p className="auth-form__link">
-            כבר יש לך חשבון?{' '}
-            <Link to="/login">התחבר כאן</Link>
+            כבר יש לך חשבון? <Link to="/login">התחבר כאן</Link>
           </p>
         </form>
       </div>

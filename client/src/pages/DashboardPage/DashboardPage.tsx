@@ -1,34 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { dreamsAPI } from '../../services/api';
-import { Dream, ApiResponse } from '../../types';
-import DreamCard from '../../components/DreamCard/DreamCard';
-import './DashboardPage.scss';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { fetchDreams } from "../../redux/slices/dreamsSlice";
+import DreamCard from "../../components/DreamCard/DreamCard";
+import "./DashboardPage.scss";
 
 function DashboardPage() {
-  const { user } = useAuth();
-  const [dreams, setDreams] = useState<Dream[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+  const { dreams, isLoading } = useAppSelector((state) => state.dreams);
 
   // Fetch dreams on mount
   useEffect(() => {
-    const fetchDreams = async () => {
-      try {
-        const response = await dreamsAPI.getAll() as ApiResponse<Dream[]>;
-        if (response.success && response.data) {
-          setDreams(response.data);
-        }
-      } catch {
-        setError('שגיאה בטעינת החלומות');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchDreams();
-  }, []);
+    dispatch(fetchDreams());
+  }, [dispatch]);
 
   // Calculate stats
   const totalDreams = dreams.length;
@@ -37,25 +22,27 @@ function DashboardPage() {
 
   // Get most common mood
   const getMostCommonMood = () => {
-    if (dreams.length === 0) return '😐';
-    
+    if (dreams.length === 0) return "😐";
+
     const moodCounts: Record<string, number> = {};
     dreams.forEach((d) => {
       moodCounts[d.mood] = (moodCounts[d.mood] || 0) + 1;
     });
-    
-    const mostCommon = Object.entries(moodCounts).sort((a, b) => b[1] - a[1])[0];
-    
+
+    const mostCommon = Object.entries(moodCounts).sort(
+      (a, b) => b[1] - a[1]
+    )[0];
+
     const moodEmojis: Record<string, string> = {
-      happy: '😊',
-      sad: '😢',
-      scared: '😱',
-      confused: '😕',
-      excited: '🤩',
-      neutral: '😐',
+      happy: "😊",
+      sad: "😢",
+      scared: "😱",
+      confused: "😕",
+      excited: "🤩",
+      neutral: "😐",
     };
-    
-    return moodEmojis[mostCommon?.[0]] || '😐';
+
+    return moodEmojis[mostCommon?.[0]] || "😐";
   };
 
   // Get recent dreams (last 5)
@@ -77,8 +64,6 @@ function DashboardPage() {
           + חלום חדש
         </Link>
       </header>
-
-      {error && <div className="error-message">{error}</div>}
 
       <div className="dashboard__stats">
         <div className="stat-card">

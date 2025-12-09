@@ -1,9 +1,15 @@
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { logout } from '../../redux/slices/authSlice';
 import './Sidebar.scss';
 
 function Sidebar() {
-  const { user, logout } = useAuth();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   const menuItems = [
     { path: '/dashboard', icon: '🏠', label: 'דף הבית' },
@@ -39,7 +45,7 @@ function Sidebar() {
           <span className="sidebar__user-icon">👤</span>
           <span className="sidebar__user-name">{user?.name}</span>
         </div>
-        <button className="sidebar__logout" onClick={logout}>
+        <button className="sidebar__logout" onClick={handleLogout}>
           יציאה
         </button>
       </div>

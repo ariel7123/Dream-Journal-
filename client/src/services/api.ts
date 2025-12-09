@@ -1,8 +1,8 @@
-const API_URL = '/api';
+const API_URL = "/api";
 
 // Helper function to get token from localStorage
 const getToken = (): string | null => {
-  return localStorage.getItem('token');
+  return localStorage.getItem("token");
 };
 
 // Helper function to make API requests
@@ -13,13 +13,13 @@ async function request<T>(
   const token = getToken();
 
   const headers: HeadersInit = {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
     ...options.headers,
   };
 
   // Add Authorization header if token exists
   if (token) {
-    (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
+    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_URL}${endpoint}`, {
@@ -30,7 +30,7 @@ async function request<T>(
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error || 'Something went wrong');
+    throw new Error(data.error || "Something went wrong");
   }
 
   return data;
@@ -39,23 +39,23 @@ async function request<T>(
 // Auth API
 export const authAPI = {
   register: (name: string, email: string, password: string) =>
-    request('/auth/register', {
-      method: 'POST',
+    request("/auth/register", {
+      method: "POST",
       body: JSON.stringify({ name, email, password }),
     }),
 
   login: (email: string, password: string) =>
-    request('/auth/login', {
-      method: 'POST',
+    request("/auth/login", {
+      method: "POST",
       body: JSON.stringify({ email, password }),
     }),
 
-  getMe: () => request('/auth/me'),
+  getMe: () => request("/auth/me"),
 };
 
 // Dreams API
 export const dreamsAPI = {
-  getAll: () => request('/dreams'),
+  getAll: () => request("/dreams"),
 
   getOne: (id: string) => request(`/dreams/${id}`),
 
@@ -67,32 +67,35 @@ export const dreamsAPI = {
     tags?: string[];
     isLucid?: boolean;
   }) =>
-    request('/dreams', {
-      method: 'POST',
+    request("/dreams", {
+      method: "POST",
       body: JSON.stringify(dream),
     }),
 
-  update: (id: string, dream: Partial<{
-    title: string;
-    content: string;
-    date: string;
-    mood: string;
-    tags: string[];
-    isLucid: boolean;
-    isFavorite: boolean;
-  }>) =>
+  update: (
+    id: string,
+    dream: Partial<{
+      title: string;
+      content: string;
+      date: string;
+      mood: string;
+      tags: string[];
+      isLucid: boolean;
+      isFavorite: boolean;
+    }>
+  ) =>
     request(`/dreams/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(dream),
     }),
 
   delete: (id: string) =>
     request(`/dreams/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     }),
 
   toggleFavorite: (id: string) =>
     request(`/dreams/${id}/favorite`, {
-      method: 'PATCH',
+      method: "PATCH",
     }),
 };
